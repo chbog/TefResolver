@@ -38,7 +38,7 @@ public class ObservationData {
     private String windDirection;
 
     @Column
-    private String windSpeed;
+    private Integer windSpeed;
 
     @ManyToOne
     @JoinColumn(name = "report_id")
