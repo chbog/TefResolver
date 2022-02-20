@@ -19,8 +19,8 @@ public class ReportController {
     }
 
     @PostMapping
-    public String upload(@RequestParam("file") MultipartFile file){
-        return file.getContentType() + " " + file.getOriginalFilename(); //stub
+    public Report upload(@RequestParam("file") MultipartFile file){
+        return reportService.saveExcelFile(file);
     }
 
     @GetMapping("/{id}")
