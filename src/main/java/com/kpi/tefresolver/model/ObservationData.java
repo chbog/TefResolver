@@ -1,5 +1,6 @@
 package com.kpi.tefresolver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -42,6 +43,7 @@ public class ObservationData {
 
     @ManyToOne
     @JoinColumn(name = "report_id")
+    @JsonIgnore
     private Report report;
 
     @Override
