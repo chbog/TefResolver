@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class ReportNotFoundAdvice {
-    @ExceptionHandler(ReportNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleReportNotFoundException(ReportNotFoundException e) {
-        return e.getMessage();
+public class DataNotValidAdvice {
+    @ExceptionHandler(DataNotValidException.class)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    public void handleDataNotValidException(DataNotValidException e){
+        e.printStackTrace();
     }
 }
