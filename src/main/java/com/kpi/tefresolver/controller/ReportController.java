@@ -13,6 +13,11 @@ import java.util.List;
 public class ReportController {
     private ReportService reportService;
 
+    @Autowired
+    public void setReportService(ReportService reportService) {
+        this.reportService = reportService;
+    }
+
     @GetMapping
     public List<Report> all(){
         return List.of(new Report()); //stub
@@ -20,6 +25,11 @@ public class ReportController {
 
     @PostMapping
     public Report upload(@RequestParam("file") MultipartFile file){
+        return reportService.saveExcelFile(file);
+    }
+
+    @PostMapping("/interpolate")
+    public Report interpolate(@RequestParam("file") MultipartFile file){
         return reportService.saveExcelFile(file);
     }
 
@@ -32,8 +42,4 @@ public class ReportController {
         return reportService;
     }
 
-    @Autowired
-    public void setReportService(ReportService reportService) {
-        this.reportService = reportService;
-    }
 }
