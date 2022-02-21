@@ -57,7 +57,7 @@ public class ReportService {
 
     public List getReportAsExcelFileById(Long id){
         Report report = reportRepository.findById(id).orElseThrow(() -> new ReportNotFoundException(id));
-        ByteArrayInputStream excelStream = ExcelUtil.observationDataToExcel(report.getRows(), report.getFileName());
+        ByteArrayInputStream excelStream = ExcelUtil.observationDataToExcel(report.getRows(), report.getFileName().replaceFirst("\\..*", ""));
         return List.of(report.getFileName(), new InputStreamResource(excelStream));
     }
 
