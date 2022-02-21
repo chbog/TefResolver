@@ -23,7 +23,7 @@ public class ExcelUtil {
     public static String[] HEADERS = {"Month number", "UTC", "Temperature, °C", "Wind direction", "Average wind speed, m/s"};
 
     public static ByteArrayInputStream observationDataToExcel(List<ObservationData> observationDataList, String sheetName) {
-        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream();) {
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             Sheet sheet = workbook.createSheet(sheetName);
             // Header
             Row headerRow = sheet.createRow(0);
@@ -31,7 +31,6 @@ public class ExcelUtil {
                 Cell cell = headerRow.createCell(col);
                 cell.setCellValue(HEADERS[col]);
             }
-            FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
             CellStyle style = workbook.createCellStyle();
             DataFormat df = workbook.createDataFormat();
             style.setDataFormat(df.getFormat("hh:mm"));
