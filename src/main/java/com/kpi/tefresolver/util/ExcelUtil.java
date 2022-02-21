@@ -10,10 +10,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
+
+import static org.apache.poi.ss.usermodel.DateUtil.SECONDS_PER_DAY;
 
 @Component
 public class ExcelUtil {
@@ -38,19 +40,23 @@ public class ExcelUtil {
             for (ObservationData data : observationDataList) {
                 Row row = sheet.createRow(rowIdx++);
                 row.createCell(0, CellType.NUMERIC).setCellValue(data.getDayNumber());
-                Cell observationTimeCell = row.createCell(1, CellType.FORMULA);
-                observationTimeCell.setCellFormula("TIME(" + data.getObservationTime().getHour()
-                        + ", " + data.getObservationTime().getMinute() + ", 00)");
+                Cell observationTimeCell = row.createCell(1, CellType.NUMERIC);
+                observationTimeCell.setCellValue(convertLocalTime(data.getObservationTime()));
                 observationTimeCell.setCellStyle(style);
-//                row.createCell(1, CellType.NUMERIC).setCellValue();
-//                row.createCell(2, CellType.NUMERIC).setCellValue(tutorial.getDescription());
-//                row.createCell(3).setCellValue(tutorial.isPublished());
+                row.createCell(2, CellType.NUMERIC).setCellValue(data.getTemperature());
+                row.createCell(3, CellType.STRING).setCellValue(data.getWindDirection());
+                row.createCell(4, CellType.NUMERIC).setCellValue(data.getWindSpeed());
             }
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
         } catch (IOException e) {
             throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
         }
+    }
+
+    private static double convertLocalTime(LocalTime time){
+        double totalSeconds = time.getSecond() + (time.getMinute() + (time.getHour()) * 60) * 60;
+        return totalSeconds / (SECONDS_PER_DAY);
     }
 
     public static boolean isExcelFormat(MultipartFile file) {
