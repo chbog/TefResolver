@@ -2,6 +2,7 @@ package com.kpi.tefresolver.controller;
 
 import com.kpi.tefresolver.exception.ReportNotFoundException;
 import com.kpi.tefresolver.model.Report;
+import com.kpi.tefresolver.service.InterpolationService;
 import com.kpi.tefresolver.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequestMapping("/api/reports")
 public class ReportController {
     private ReportService reportService;
+    private InterpolationService interpolationService;
 
     @Autowired
     public void setReportService(ReportService reportService) {
@@ -33,9 +35,9 @@ public class ReportController {
         return reportService.saveExcelFile(file);
     }
 
-    @PostMapping("/interpolate")
-    public Report interpolate(@RequestParam("file") MultipartFile file){
-        return reportService.saveExcelFile(file);
+    @PutMapping("/{id}/interpolate")
+    public Report interpolate(@PathVariable Long id, @RequestParam("method") String method){
+        return interpolationService.interpolateReport(id, method);
     }
 
     @GetMapping("/{id}")
@@ -56,4 +58,12 @@ public class ReportController {
         return reportService;
     }
 
+    public InterpolationService getInterpolationService() {
+        return interpolationService;
+    }
+
+    @Autowired
+    public void setInterpolationService(InterpolationService interpolationService) {
+        this.interpolationService = interpolationService;
+    }
 }

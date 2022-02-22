@@ -23,7 +23,7 @@ public class ObservationData {
 
     @Column
 //    @Size(min = 1, max = 31)
-    private Short dayNumber;
+    private Integer dayNumber;
 
     @Column
 //    @Temporal(TemporalType.TIME)
@@ -31,7 +31,7 @@ public class ObservationData {
 
     @Column
 //    @Min(-273)
-    private Short temperature;
+    private Integer temperature;
 
     @Column
 //    @Enumerated(EnumType.STRING)
