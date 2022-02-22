@@ -23,7 +23,7 @@ public class ExcelUtil {
     public static String[] HEADERS = {"Month number", "UTC", "Temperature, °C", "Wind direction", "Average wind speed, m/s"};
 
     public static ByteArrayInputStream observationDataToExcel(List<ObservationData> observationDataList, String sheetName) {
-        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream();) {
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             Sheet sheet = workbook.createSheet(sheetName);
             // Header
             Row headerRow = sheet.createRow(0);
@@ -31,7 +31,6 @@ public class ExcelUtil {
                 Cell cell = headerRow.createCell(col);
                 cell.setCellValue(HEADERS[col]);
             }
-            FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
             CellStyle style = workbook.createCellStyle();
             DataFormat df = workbook.createDataFormat();
             style.setDataFormat(df.getFormat("hh:mm"));
@@ -39,13 +38,25 @@ public class ExcelUtil {
             int rowIdx = 1;
             for (ObservationData data : observationDataList) {
                 Row row = sheet.createRow(rowIdx++);
-                row.createCell(0, CellType.NUMERIC).setCellValue(data.getDayNumber());
-                Cell observationTimeCell = row.createCell(1, CellType.NUMERIC);
-                observationTimeCell.setCellValue(convertLocalTime(data.getObservationTime()));
-                observationTimeCell.setCellStyle(style);
-                row.createCell(2, CellType.NUMERIC).setCellValue(data.getTemperature());
-                row.createCell(3, CellType.STRING).setCellValue(data.getWindDirection());
-                row.createCell(4, CellType.NUMERIC).setCellValue(data.getWindSpeed());
+                if(data.getDayNumber() != null){
+                    row.createCell(0, CellType.NUMERIC).setCellValue(data.getDayNumber());
+                }
+                if(data.getObservationTime() != null){
+                    Cell observationTimeCell = row.createCell(1, CellType.NUMERIC);
+                    observationTimeCell.setCellValue(convertLocalTime(data.getObservationTime()));
+                    observationTimeCell.setCellStyle(style);
+                }
+                if(data.getTemperature() != null){
+                    row.createCell(2, CellType.NUMERIC).setCellValue(data.getTemperature());
+
+                }
+                if(data.getWindDirection() != null){
+                    row.createCell(3, CellType.STRING).setCellValue(data.getWindDirection());
+
+                }
+                if(data.getWindSpeed() != null){
+                    row.createCell(4, CellType.NUMERIC).setCellValue(data.getWindSpeed());
+                }
             }
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
@@ -115,7 +126,7 @@ public class ExcelUtil {
 
     private static void extractAndSetDayNumber(ObservationData data, Cell cell) {
         if (cell.getCellType() == CellType.NUMERIC) {
-            data.setDayNumber((short) cell.getNumericCellValue());
+            data.setDayNumber((int) cell.getNumericCellValue());
         }
     }
 
@@ -127,7 +138,7 @@ public class ExcelUtil {
 
     private static void extractAndSetTemperature(ObservationData data, Cell cell) {
         if (cell.getCellType() == CellType.NUMERIC) {
-            data.setTemperature((short) cell.getNumericCellValue());
+            data.setTemperature((int) cell.getNumericCellValue());
         }
     }
 
