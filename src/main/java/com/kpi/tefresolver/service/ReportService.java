@@ -30,9 +30,9 @@ public class ReportService {
         if(ExcelUtil.isExcelFormat(file)){
             List<ObservationData> data = ExcelUtil.excelToObservationData(file);
 
-            if(!ObservationDataListValidation.checkObservationListValidation(data)){ // minimal validation implemented
-                throw new DataNotValidException();
-            }
+//            if(!ObservationDataListValidation.checkObservationListValidation(data)){ // minimal validation implemented
+//                throw new DataNotValidException();
+//            }
 
             return saveReport(file.getOriginalFilename(), false, data);
         }
